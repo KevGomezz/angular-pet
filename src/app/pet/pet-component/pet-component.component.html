@@ -1,109 +1,31 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Exemplo CRUD de Animais</title>
-</head>
-<body>
+<!-- pet-component.component.html -->
 
-  <h2>O que gostaria de fazer?</h2>
+<div>
+  <h2>Tentativa 5000000000</h2>
 
-  <form id="animalForm">
+  <form [formGroup]="form">
+    <label for="animalId">ID:</label>
+    <input id="animalId" type="text" formControlName="id" required>
 
-    <button type="button" onclick="cadastrarAnimal()">Cadastrar animal</button>
-    <button type="button" onclick="listarAnimais()">Listar animais</button>
-    <button type="button" onclick="atualizarAnimal()">Atualizar animal</button>
-    <button type="button" onclick="excluirAnimal()">Excluir animal</button>
-    <button type="button" onclick="listarAnimaisAdotados()">Listar Adotados</button>
-    <button type="button" onclick="adotarAnimal()">Adotar</button>
+    <label for="animalNome">Nome:</label>
+    <input id="animalNome" type="text" formControlName="nome" required>
+
+    <label for="animalRaca">Raça:</label>
+    <input id="animalRaca" type="text" formControlName="raca" required>
+
+    <button type="button" (click)="cadastrarAnimal()">Cadastrar</button>
+    <button type="button" (click)="atualizarAnimal()">Atualizar</button>
+    <button type="button" (click)="excluirAnimal()">Excluir</button>
+    <!-- Outros botões -->
   </form>
 
-  <div id="animalOutput"></div>
-
-  <script>
-    // Simulando uma lista de animais
-    let animais = [];
-
-    function cadastrarAnimal() {
-      const id = document.getElementById('animalId').value;
-      const nome = document.getElementById('animalNome').value;
-      const raca = document.getElementById('animalRaca').value;
-
-      const animal = { id, nome, raca, adotado: false };
-      animais.push(animal);
-
-      exibirAnimais();
-    }
-
-    function listarAnimais() {
-      exibirAnimais();
-    }
-
-    function atualizarAnimal() {
-      const id = prompt('Digite o novo ID:');
-      const nome = prompt('Digite o novo nome:');
-      const raca = prompt('Digite a nova raça:');
-
-      const indiceAnimal = prompt('Digite o índice do animal a ser atualizado:');
-      if (indiceAnimal >= 0 && indiceAnimal < animais.length) {
-        animais[indiceAnimal].id = id;
-        animais[indiceAnimal].nome = nome;
-        animais[indiceAnimal].raca = raca;
-        exibirAnimais();
-      } else {
-        alert('Índice inválido');
-      }
-    }
-
-    function excluirAnimal() {
-      const indiceAnimal = prompt('Digite o índice do animal a ser excluído:');
-      if (indiceAnimal >= 0 && indiceAnimal < animais.length) {
-        animais.splice(indiceAnimal, 1);
-        exibirAnimais();
-      } else {
-        alert('Índice inválido');
-      }
-    }
-
-    function adotarAnimal() {
-      const indiceAnimal = prompt('Digite o índice do animal a ser adotado:');
-      if (indiceAnimal >= 0 && indiceAnimal < animais.length) {
-        animais[indiceAnimal].adotado = true;
-        exibirAnimais();
-      } else {
-        alert('Índice inválido');
-      }
-    }
-
-    function listarAnimaisAdotados() {
-      const animaisAdotados = animais.filter(animal => animal.adotado);
-      const outputDiv = document.getElementById('animalOutput');
-      outputDiv.innerHTML = '<h3>Animais Adotados:</h3>';
-
-      if (animaisAdotados.length === 0) {
-        outputDiv.innerHTML += '<p>Nenhum animal adotado</p>';
-      } else {
-        animaisAdotados.forEach((animal, index) => {
-          outputDiv.innerHTML += `<p>${index}: ID ${animal.id} - ${animal.nome} (${animal.raca})</p>`;
-        });
-      }
-    }
-
-    function exibirAnimais() {
-      const outputDiv = document.getElementById('animalOutput');
-      outputDiv.innerHTML = '<h3>Animais:</h3>';
-
-      if (animais.length === 0) {
-        outputDiv.innerHTML += '<p>Nenhum animal disponível</p>';
-      } else {
-        animais.forEach((animal, index) => {
-          const adotadoStatus = animal.adotado ? 'Adotado' : 'Disponível';
-          outputDiv.innerHTML += `<p>${index}: ID ${animal.id} - ${animal.nome} (${animal.raca}) - ${adotadoStatus}</p>`;
-        });
-      }
-    }
-  </script>
-
-</body>
-</html>
+  <div id="animalOutput">
+    <h3>Animais:</h3>
+    <div *ngIf="animais.length === 0">
+      <p>Nenhum animal disponível</p>
+    </div>
+    <div *ngFor="let animal of animais; let i = index">
+      <p>{{ i }}: ID {{ animal.id }} - {{ animal.nome }} ({{ animal.raca }}) - {{ animal.adotado ? 'Adotado' : 'Disponível' }}</p>
+    </div>
+  </div>
+</div>
