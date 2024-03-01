@@ -1,7 +1,5 @@
-<!-- pet-component.component.html -->
-
 <div>
-  <h2>Tentativa 5000000000</h2>
+  <h2>Gerenciamento de Animais</h2>
 
   <form [formGroup]="form">
     <label for="animalId">ID:</label>
@@ -16,16 +14,63 @@
     <button type="button" (click)="cadastrarAnimal()">Cadastrar</button>
     <button type="button" (click)="atualizarAnimal()">Atualizar</button>
     <button type="button" (click)="excluirAnimal()">Excluir</button>
-    <!-- Outros botões -->
+    <button type="button" (click)="listarAnimaisAdotados()">Listar Adotados</button>
   </form>
 
   <div id="animalOutput">
-    <h3>Animais:</h3>
+    <h3>Lista de Animais:</h3>
     <div *ngIf="animais.length === 0">
       <p>Nenhum animal disponível</p>
     </div>
-    <div *ngFor="let animal of animais; let i = index">
-      <p>{{ i }}: ID {{ animal.id }} - {{ animal.nome }} ({{ animal.raca }}) - {{ animal.adotado ? 'Adotado' : 'Disponível' }}</p>
+    <div *ngIf="!mostrarListaAdotados">
+      <!-- Lista de animais disponíveis -->
+      <div class="scrollable-table">
+        <table class="animal-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nome</th>
+              <th>Raça</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let animal of animais; let i = index">
+              <td>{{ animal.id }}</td>
+              <td>{{ animal.nome }}</td>
+              <td>{{ animal.raca }}</td>
+              <td>{{ animal.adotado ? 'Adotado' : 'Disponível' }}</td>
+              <button type="button" (click)="adotarAnimal(animal.id)" [disabled]="animal.adotado || animaisParaAdotar.includes(animal.id)">Adotar</button>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div *ngIf="mostrarListaAdotados">
+      <!-- Lista de animais adotados -->
+      <h3>Lista de Animais Adotados:</h3>
+      <div class="scrollable-table">
+        <table class="animal-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nome</th>
+              <th>Raça</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let animal of animaisAdotados; let i = index">
+              <td>{{ animal.id }}</td>
+              <td>{{ animal.nome }}</td>
+              <td>{{ animal.raca }}</td>
+              <td>{{ animal.adotado ? 'Adotado' : 'Disponível' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <button type="button" (click)="voltarParaAnimaisDisponiveis()">Voltar para Animais Disponíveis</button>
     </div>
   </div>
 </div>
